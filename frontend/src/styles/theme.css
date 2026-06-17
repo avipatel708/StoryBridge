@@ -1,0 +1,100 @@
+/* src/styles/theme.css */
+/* Design token file – defines CSS variables for colors, typography, spacing, shadows, and glassmorphism */
+:root {
+  /* Primary palette (HSL) */
+  --color-primary-h: 240;
+  --color-primary-s: 60%;
+  --color-primary-l: 55%;
+  --color-primary: hsl(var(--color-primary-h), var(--color-primary-s), var(--color-primary-l));
+
+  --color-secondary-h: 280;
+  --color-secondary-s: 60%;
+  --color-secondary-l: 55%;
+  --color-secondary: hsl(var(--color-secondary-h), var(--color-secondary-s), var(--color-secondary-l));
+
+  --color-accent-h: 340;
+  --color-accent-s: 80%;
+  --color-accent-l: 55%;
+  --color-accent: hsl(var(--color-accent-h), var(--color-accent-s), var(--color-accent-l));
+
+  /* Surface colors */
+  --color-background: #F8FAFC; /* light mode background */
+  --color-surface: #FFFFFF;   /* cards, modals */
+  --color-text: #0F172A;      /* dark text */
+
+  /* Dark mode overrides */
+  --color-background-dark: #0B1020;
+  --color-surface-dark: #121829;
+  --color-text-dark: #F8FAFC;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-outfit: 'Outfit', sans-serif;
+  --font-size-base: 0.9375rem; /* 15px */
+  --line-height-base: 1.5;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  /* Shadows – premium */
+  --shadow-sm: 0 2px 8px rgba(15,23,42,0.04);
+  --shadow-md: 0 4px 20px rgba(15,23,42,0.05);
+  --shadow-lg: 0 10px 40px rgba(15,23,42,0.06);
+  --shadow-xl: 0 20px 50px rgba(15,23,42,0.08);
+
+  /* Glassmorphism */
+  --glass-bg-light: rgba(255,255,255,0.65);
+  --glass-bg-dark: rgba(11,16,32,0.6);
+  --glass-blur: 20px;
+}
+
+/* Dark mode variable overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--color-background-dark);
+    --color-surface: var(--color-surface-dark);
+    --color-text: var(--color-text-dark);
+  }
+}
+
+/* Utility classes (Tailwind‑like) */
+.premium-glass {
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255,255,255,0.4);
+}
+.dark .premium-glass {
+  background: var(--glass-bg-dark);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.glass-card {
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.dark .glass-card {
+  background: var(--glass-bg-dark);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Gradient utilities */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
+
+/* Ambient glow utilities */
+.ambient-glow-primary { box-shadow: 0 0 25px var(--color-primary); }
+.ambient-glow-secondary { box-shadow: 0 0 25px var(--color-secondary); }
+.ambient-glow-accent { box-shadow: 0 0 25px var(--color-accent); }

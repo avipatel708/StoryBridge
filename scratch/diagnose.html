@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StoryBridge Supabase Connection Diagnostic</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+    h1 { color: #818cf8; }
+    .card {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px border #334155;
+      margin-bottom: 20px;
+    }
+    .status {
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+    .success { background: #065f46; color: #34d399; }
+    .failed { background: #7f1d1d; color: #f87171; }
+    pre {
+      background: #090d16;
+      padding: 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 13px;
+    }
+    button {
+      background: #4f46e5;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover { background: #4338ca; }
+  </style>
+</head>
+<body>
+  <h1>Connection Diagnostic</h1>
+  <p>This page tests if your browser can connect to your Supabase project.</p>
+  
+  <div class="card">
+    <h3>Supabase URL Reachability</h3>
+    <p>Target URL: <code id="supabase-url">https://fmbzsljswafgvpfwiwyl.supabase.co</code></p>
+    <p>Status: <span id="reachability-status" class="status">Testing...</span></p>
+    <pre id="reachability-details">Waiting for test to start...</pre>
+  </div>
+
+  <div class="card">
+    <h3>CORS & API Test</h3>
+    <p>Status: <span id="api-status" class="status">Testing...</span></p>
+    <pre id="api-details">Waiting for test to start...</pre>
+  </div>
+
+  <button onclick="runTests()">Re-run Diagnostics</button>
+
+  <script>
+    const supabaseUrl = "https://fmbzsljswafgvpfwiwyl.supabase.co";
+    const anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZtYnpzbGpzd2FmZ3ZwZndpd3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMDY1MjUsImV4cCI6MjA5NTc4MjUyNX0.XYgmO4Rd9XS2jVD0zsA8XIqVhEHTfTBbAJB9HbFR16E";
+
+    async function testReachability() {
+      const statusEl = document.getElementById('reachability-status');
+      const detailsEl = document.getElementById('reachability-details');
+      
+      try {
+        const start = Date.now();
+        // Ping the supabase rest endpoint (should return 401/400 or info, but must respond)
+        const res = await fetch(supabaseUrl);
+        const duration = Date.now() - start;
+        
+        statusEl.textContent = 'CONNECTED';
+        statusEl.className = 'status success';
+        detailsEl.textContent = `Successfully reached server in ${duration}ms.\nResponse status: ${res.status}`;
+      } catch (err) {
+        statusEl.textContent = 'BLOCKED / UNREACHABLE';
+        statusEl.className = 'status failed';
+        detailsEl.textContent = `Error details:\nName: ${err.name}\nMessage: ${err.message}\n\nCommon causes:\n1. Ad-blocker (uBlock Origin, Brave Shields) is blocking requests to *.supabase.co.\n2. Local firewall, antivirus, or DNS blocker (like Pi-hole) is blocking the domain.\n3. You are offline.`;
+      }
+    }
+
+    async function testApi() {
+      const statusEl = document.getElementById('api-status');
+      const detailsEl = document.getElementById('api-details');
+      
+      try {
+        const start = Date.now();
+        const res = await fetch(`${supabaseUrl}/rest/v1/profiles?select=id&limit=1`, {
+          headers: {
+            apikey: anonKey,
+            Authorization: `Bearer ${anonKey}`
+          }
+        });
+        const duration = Date.now() - start;
+        
+        if (res.ok) {
+          statusEl.textContent = 'API OK';
+          statusEl.className = 'status success';
+          detailsEl.textContent = `Successfully queried database in ${duration}ms.\nHTTP ${res.status}\nResponse: ${await res.text()}`;
+        } else {
+          statusEl.textContent = 'API ERROR';
+          statusEl.className = 'status failed';
+          detailsEl.textContent = `Reached server but received error:\nHTTP ${res.status}\nResponse: ${await res.text()}`;
+        }
+      } catch (err) {
+        statusEl.textContent = 'FETCH FAILED';
+        statusEl.className = 'status failed';
+        detailsEl.textContent = `Error details:\nName: ${err.name}\nMessage: ${err.message}`;
+      }
+    }
+
+    function runTests() {
+      document.getElementById('reachability-status').textContent = 'Testing...';
+      document.getElementById('reachability-status').className = 'status';
+      document.getElementById('api-status').textContent = 'Testing...';
+      document.getElementById('api-status').className = 'status';
+      
+      testReachability();
+      testApi();
+    }
+
+    runTests();
+  </script>
+</body>
+</html>

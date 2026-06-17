@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Path 1: Upper curve flowing down-left -->
+  <path
+    d="M75 25 C65 15, 35 20, 30 45 C25 70, 55 85, 75 75"
+    stroke="url(#flow-grad-1)"
+    stroke-width="10"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <!-- Path 2: Lower curve flowing up-right, completing the S shape -->
+  <path
+    d="M25 75 C35 85, 65 80, 70 55 C75 30, 45 15, 25 25"
+    stroke="url(#flow-grad-2)"
+    stroke-width="10"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <!-- Connected intersection nodes representing people -->
+  <circle cx="50" cy="50" r="6" fill="#8B5CF6" />
+  
+  <defs>
+    <linearGradient id="flow-grad-1" x1="75" y1="20" x2="30" y2="75" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    <linearGradient id="flow-grad-2" x1="25" y1="80" x2="70" y2="25" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#EC4899" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+  </defs>
+</svg>

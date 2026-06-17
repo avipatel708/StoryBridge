@@ -1,0 +1,11 @@
+{
+  "name": "storybridge-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "setup": "node scripts/setup-database.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.21.0"
+  }
+}
